@@ -23,7 +23,6 @@
                   (t (error-unhandled-message $context $message)))))
     (finally  .
               ,(lambda ($context)
-                 ($debug "z" $context nil)
                  (values 
                   ($?local $context "answer")
                   ($?local $context "found"))))
@@ -42,7 +41,6 @@
                      (("unsuccessful" . "found") . (("$self" . "found")))
                      (("successful" . "found") . (("$self" . "found")))
                      (("successful" . "answer") . (("$self" . "answer")))))))
-
 (defparameter *scroll-through-atoms*
   `(
     (name  . "scroll through atoms")
@@ -50,14 +48,15 @@
     (inputs .  ("name" "advance" ))
     (outputs .  ("EOF" "try 1 name match" ))
     (locals .  ())
-    (initially   .
-                 (lambda ($context)
-                   (let ((atom-memory ($?field ($?field $context '$args) 'atom-memory)))
-                     (let (($pred (?eof atom-memory)))
-                       (cond
-                        ((equal $pred $yes)
-                         ($send '("scroll through atoms" . "EOF") $no $context '("scroll-through-atoms". "initially")))
-                        (t nil))))))
+    (initially .
+               ,(lambda ($context)
+                  (let ((atom-memory ($?field ($?field $context '$args) 'atom-memory)))
+                    (let (($pred (?eof atom-memory)))
+                      (cond
+                        ((equal $yes $pred)
+                         ($send '("scroll through atoms" . "EOF") $no $context '("scroll-through-atoms" . "initially")))
+                        ((equal $no $pred)
+			 nil))))))
     (handler . 
              ,(lambda ($context $message)
                 (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
@@ -70,16 +69,17 @@
                      (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
                        (let ((buffer ($?local $context 'buffer)))
                          (@advance-to-next-atom atom-memory)
+			 (let (($pred (?eof atom-memory)))
                          (cond
-                           ((?eof atom-memory)
+                           ((equal $yes $pred)
                             ($send '("scroll through atoms" . "EOF") $no $context $message))
-                           (t ($send '("scroll through atoms" . "try 1 name match") buffer $context $message))))))
+                           (t 
+			    ($send '("scroll through atoms" . "try 1 name match") buffer $context $message)))))))
                     (t (error-unhandled-message $context $message))))))
     
     (finally  .  nil)
     (children .  nil)
     (connections .  nil)))
-
 (defparameter *match-single-atom-name*
   `(
     (name .  "match single atom name")
@@ -90,17 +90,22 @@
     (initially .  nil)
     (handler . 
              ,(lambda ($context $message)
+
                 (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
+
+
                   (cond
                     ((string= "go" (?etag-from-message $message))
-                     (let ( ($pred (?match-string atom-memory (?data-from-message $message))) )
-                       (cond ($pred
-                              ($send '("match single atom name" . "ok") (current-atom-index atom-memory) $context $message))
-                             ( t($send '("match single atom name" . "mismatch") $yes $context $message)))))))))
+                     (let (($pred (?match-string atom-memory (?data-from-message $message))))
+                       (cond
+                        ((equal $yes $pred)
+                         ($send '("match single atom name" . "ok") (current-atom-index atom-memory) $context $message))
+                        (t
+			 ($send '("match single atom name" . "mismatch") t $context $message)))))
+                    (t (error-unhandled-message $context $message))))))
     (finally .  nil)
     (children .  nil)
     (connections .  nil)))
-
 (defparameter *unsuccessful*
   `(
     (name .  "unsuccessful")
@@ -118,7 +123,6 @@
     (finally .  nil)
     (children .  nil)
     (connections .  nil)))
-
 (defparameter *successful*
   `(
     (name .  "successful")
@@ -129,45 +133,38 @@
     (initially .  nil)
     (handler . 
              ,(lambda ($context $message)
-                (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
-                  (cond
-                    ((string= "conclude" (?etag-from-message $message))
-                     ($send '("successful" . "answer") (?data-from-message $message) $context $message)
-                     ($send '("successful" . "found") $yes $context $message)
-                     ($debug "c" $context $message))
-                    (t (error-unhandled-message $context $message))))))
+                (cond
+                  ((string= "conclude" (?etag-from-message $message))
+                   ($send '("successful" . "answer") (?data-from-message $message) $context $message)
+                   ($send '("successful" . "found") $yes $context $message))
+                  (t (error-unhandled-message $context $message)))))
     (finally .  nil)
     (children .  nil)
     (connections .  nil)))
-
 (defparameter *lookup-signature* 
   `(
     (name .  "lookup")
     (etags .  (("name" ("name")) ("found" ("found")) ("answer" ("answer"))))
     (inputs .  ("name" ))
     (outputs .  ("found" "answer" ))))
-
 (defparameter *scroll-through-atoms-signature*
   `(
     (name .  "scroll through atoms")
     (etags .  (("name" ("name")) ("advance" ("advance")) ("EOF" ("EOF")) ("try 1 name match" ("try 1 name match"))))
     (inputs .  ("name" "advance" ))
     (outputs .  ("EOF" "try 1 name match" ))))
-
 (defparameter *match-single-atom-name-signature*
   `(
     (name .  "match single atom name")
     (etags .  (("go" ("go")) ("mismatch" ("mismatch")) ("ok" ("ok"))))
     (inputs .  ("go" ))
     (outputs .  ("mismatch" "ok" ))))
-
 (defparameter *unsuccessful-signature*
   `(
     (name .  "unsuccessful")
     (etags .  (("conclude" ("conclude")) ("found" ("found"))))
     (inputs .  ("conclude" ))
     (outputs .  ("found" ))))
-
 (defparameter *successful-signature*
   `(
     (name .  "unsuccessful")
