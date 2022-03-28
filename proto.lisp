@@ -47,7 +47,7 @@
     (etags  . ("name" "advance" "EOF" "try 1 name match"))
     (inputs .  ("name" "advance" ))
     (outputs .  ("EOF" "try 1 name match" ))
-    (locals .  (("name-to-be-matched" ("name-to-be-matched"))))
+    (locals . (("found" ("found")) ("answer" ("answer")) (("name-to-be-matched" ("name-to-be-matched")))))
     (initially .
                ,(lambda ($context)
                   (let ((atom-memory ($?field ($?field $context '$args) 'atom-memory)))
