@@ -5,7 +5,7 @@
     ($args . nil)
     (inputs . ("name" ))
     (outputs . ("found" "answer" ))
-    (locals  . ())
+    (locals . (("found" ("found")) ("answer" ("answer")) ("name-to-be-matched" ("name-to-be-matched"))))
     (initially . 
                ,(lambda ($context)
                   (let ((name ($?field ($?field $context '$args) 'name)))
@@ -47,10 +47,10 @@
     (etags  . ("name" "advance" "EOF" "try 1 name match"))
     (inputs .  ("name" "advance" ))
     (outputs .  ("EOF" "try 1 name match" ))
-    (locals . (("found" ("found")) ("answer" ("answer")) (("name-to-be-matched" ("name-to-be-matched")))))
+    (locals . ())
     (initially .
                ,(lambda ($context)
-                  (let ((atom-memory ($?field ($?field $context '$args) 'atom-memory)))
+                  (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
                     (let (($pred (?eof atom-memory)))
                       (cond
                         ((equal $yes $pred)
