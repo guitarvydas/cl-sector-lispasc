@@ -62,19 +62,19 @@
                 (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
                   (cond
                     ((string= "name" (?etag-from-message $message))
-                     (let ((buffer (?data-from-message $message)))
-                       ($!local $context 'buffer buffer)
-                       ($send '("scroll through atoms"  ."try 1 name match") buffer $context $message)))
+                     (let ((name-to-be-matched (?data-from-message $message)))
+                       ($!local $context 'name-to-be-matched name-to-be-matched)
+                       ($send '("scroll through atoms"  ."try 1 name match") name-to-be-matched $context $message)))
                     ((string= "advance" (?etag-from-message $message))
                      (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
-                       (let ((buffer ($?local $context 'buffer)))
+                       (let ((name-to-be-matched ($?local $context 'name-to-be-matched)))
                          (@advance-to-next-atom atom-memory)
 			 (let (($pred (?eof atom-memory)))
                          (cond
                            ((equal $yes $pred)
                             ($send '("scroll through atoms" . "EOF") $no $context $message))
                            (t 
-			    ($send '("scroll through atoms" . "try 1 name match") buffer $context $message)))))))
+			    ($send '("scroll through atoms" . "try 1 name match") name-to-be-matched $context $message)))))))
                     (t (error-unhandled-message $context $message))))))
     
     (finally  .  nil)
@@ -167,7 +167,7 @@
     (outputs .  ("found" ))))
 (defparameter *successful-signature*
   `(
-    (name .  "unsuccessful")
+    (name .  "successful")
     (etags .  (("conclude" ("conclude")) ("found" ("found")) ("answer" ("answer"))))
     (inputs .  ("conclude" ))
     (outputs .  ("found" "answer" ))))
