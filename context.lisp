@@ -21,7 +21,7 @@
 (defun ancestor-context-of (context)
   (let ((ancestor-context (assoc 'container context)))
     (if ancestor-context
-        (car ancestor-context)
+        (cdr ancestor-context)
       nil)))
 
 (defun lookup-shallow (context string)
@@ -84,12 +84,12 @@
       (format *standard-output* "child context = ~a~%" context)
       (lookup-deep context "hello"))))
 
-#+nil(defun test5 ()
+(defun test5 ()
   (let ((context-parent (make-context)))
     (let ((context (augment-context-with-field (make-context) 'container context-parent)))
-      (set-shallow context-parent "hello" "parent world 4")
+      (set-shallow context-parent "hello" "parent world 5")
       (format *standard-output* "child context = ~a~%" context)
       (lookup-deep context "hello"))))
 
 (defun test ()
-  (test4))
+  (test5))
