@@ -49,23 +49,21 @@
     (inputs .  ("name" "advance" ))
     (outputs .  ("EOF" "try 1 name match" ))
     (locals . ())
-    (initially .
-               ,(lambda ($context)
-                  (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
-                    (let (($pred (?eof atom-memory)))
-                      (cond
-                        ((equal $yes $pred)
-                         ($send '("scroll through atoms" . "EOF") $no $context '("scroll-through-atoms" . "initially")))
-                        ((equal $no $pred)
-			 nil))))))
+    (initially . ())
     (handler . 
              ,(lambda ($context $message)
                 (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
                   (cond
                     ((string= "name" (?etag-from-message $message))
                      (let ((name-to-be-matched (?data-from-message $message)))
-                       ($!local $context 'name-to-be-matched name-to-be-matched)
-                       ($send '("scroll through atoms"  ."try 1 name match") name-to-be-matched $context $message)))
+		       (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
+			 (let (($pred (?eof atom-memory)))
+			   (cond
+                             ((equal $yes $pred)
+                              ($send '("scroll through atoms" . "EOF") $no $context '("scroll-through-atoms" . "initially")))
+                             ((equal $no $pred)
+			      ($!local $context 'name-to-be-matched name-to-be-matched)
+			      ($send '("scroll through atoms"  ."try 1 name match") name-to-be-matched $context $message)))))))
                     ((string= "advance" (?etag-from-message $message))
                      (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
                        (let ((name-to-be-matched ($?local $context 'name-to-be-matched)))
