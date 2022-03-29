@@ -11,6 +11,9 @@
 	($!local top-context "found" nil)
 	($!local top-context "answer" nil)
 	($inject '("scroll through atoms" . "name") name top-context nil)
-        ($dispatch top-context)))))
+        ($dispatch top-context)
+        (values 
+         ($?local top-context "answer")
+         ($?local top-context "found"))))))
 
 

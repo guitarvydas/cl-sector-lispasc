@@ -6,10 +6,7 @@
     (inputs . ("name" ))
     (outputs . ("found" "answer" ))
     (locals . (("found" ("found")) ("answer" ("answer")) ("name-to-be-matched" ("name-to-be-matched"))))
-    (initially . 
-               ,(lambda ($context)
-                  (let ((name ($?field ($?field $context '$args) 'name)))
-                    )))
+    (initially . ())
     (handler .  
              ,(lambda ($context $message)
                 (cond
@@ -19,11 +16,7 @@
                   ((string= "answer" (?etag-from-message $message))
                    ($!local $context "answer" (?data-from-message $message)))
                   (t (error-unhandled-message $context $message)))))
-    (finally  .
-              ,(lambda ($context)
-                 (values 
-                  ($?local $context "answer")
-                  ($?local $context "found"))))
+    (finally  . ())
     (children .  (
 		  ("$self". "lookup")
                   ("scroll through atoms" . "scroll through atoms")
