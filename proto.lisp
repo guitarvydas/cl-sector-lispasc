@@ -78,19 +78,16 @@
     (initially .  nil)
     (handler . 
              ,(lambda ($context $message)
-
-                (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
-
-
-                  (cond
-                    ((string= "go" (?etag-from-message $message))
+                (cond
+                  ((string= "go" (?etag-from-message $message))
+		   (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
                      (let (($pred (?match-string atom-memory (?data-from-message $message))))
                        (cond
-                        ((equal $yes $pred)
-                         ($send '("match single atom name" . "ok") (current-atom-index atom-memory) $context $message))
-                        (t
-			 ($send '("match single atom name" . "mismatch") t $context $message)))))
-                    (t (error-unhandled-message $context $message))))))
+			 ((equal $yes $pred)
+                          ($send '("match single atom name" . "ok") (current-atom-index atom-memory) $context $message))
+			 (t
+			  ($send '("match single atom name" . "mismatch") t $context $message))))))
+		  (t (error-unhandled-message $context $message)))))
     (finally .  nil)
     (children .  nil)
     (connections .  nil)))
