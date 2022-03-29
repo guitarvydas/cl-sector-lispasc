@@ -44,7 +44,7 @@
 
 (defun augment-context-with-field (context field-symbol)
   ;; return context or new context
-  (let ((success (assoc context field-symbol)))
+  (let ((success (assoc field-symbol context)))
     (if success
         context
       (cons (cons field-symbol (make-hash-table :test 'equal)) context))))
@@ -55,5 +55,10 @@
     (set-shallow context 'own "hello" "world")
     (lookup-shallow context 'own "hello")))
 
+(defun test1 ()
+  (let ((context (augment-context-with-field nil 'own)))
+    (set-shallow context 'own "hello" "world")
+    (lookup-shallow context 'own "hello")))
+
 (defun test ()
-  (test0))
+  (test1))
