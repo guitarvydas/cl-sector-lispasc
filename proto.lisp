@@ -9,8 +9,6 @@
     (initially . 
                ,(lambda ($context)
                   (let ((name ($?field ($?field $context '$args) 'name)))
-                    ($!local $context "answer" $no)
-                    ($!local $context "found" $no)
                     ($!local $context "name-to-be-matched" name)
                     ($inject '("scroll through atoms" . "name") name $context nil))))
     (handler .  
