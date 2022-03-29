@@ -9,7 +9,7 @@
     (initially . 
                ,(lambda ($context)
                   (let ((name ($?field ($?field $context '$args) 'name)))
-                    ($inject '("scroll through atoms" . "name") name $context nil))))
+                    )))
     (handler .  
              ,(lambda ($context $message)
                 (cond

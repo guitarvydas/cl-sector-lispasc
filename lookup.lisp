@@ -10,6 +10,7 @@
         ($!local top-context "name-to-be-matched" name)
 	($!local top-context "found" nil)
 	($!local top-context "answer" nil)
+	($inject '("scroll through atoms" . "name") name top-context nil)
         ($dispatch top-context)))))
 
 
