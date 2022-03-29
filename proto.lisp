@@ -42,7 +42,6 @@
     (initially . ())
     (handler . 
              ,(lambda ($context $message)
-                (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
                   (cond
                     ((string= "name" (?etag-from-message $message))
                      (let ((name-to-be-matched (?data-from-message $message)))
@@ -50,7 +49,7 @@
 			 (let (($pred (?eof atom-memory)))
 			   (cond
                              ((equal $yes $pred)
-                              ($send '("scroll through atoms" . "EOF") $no $context '("scroll-through-atoms" . "initially")))
+			      ($send '("scroll through atoms" . "EOF") $no $context '("scroll-through-atoms" . "initially")))
                              ((equal $no $pred)
 			      ($!local $context 'name-to-be-matched name-to-be-matched)
 			      ($send '("scroll through atoms"  ."try 1 name match") name-to-be-matched $context $message)))))))
@@ -59,12 +58,12 @@
                        (let ((name-to-be-matched ($?local $context 'name-to-be-matched)))
                          (@advance-to-next-atom atom-memory)
 			 (let (($pred (?eof atom-memory)))
-                         (cond
-                           ((equal $yes $pred)
-                            ($send '("scroll through atoms" . "EOF") $no $context $message))
-                           (t 
-			    ($send '("scroll through atoms" . "try 1 name match") name-to-be-matched $context $message)))))))
-                    (t (error-unhandled-message $context $message))))))
+                           (cond
+                             ((equal $yes $pred)
+                              ($send '("scroll through atoms" . "EOF") $no $context $message))
+                             (t 
+			      ($send '("scroll through atoms" . "try 1 name match") name-to-be-matched $context $message)))))))
+                    (t (error-unhandled-message $context $message)))))
     
     (finally  .  nil)
     (children .  nil)
