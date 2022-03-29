@@ -5,6 +5,8 @@
     (let ((top-context1 (instantiate *lookup* nil prototypes)))
       (mem-reset mem)
       (let ((top-context ($maybe-set-field top-context1 '$args `( (junk . nil) (name . ,name) (atom-memory . ,mem) ))))
+	($!local top-context 'name name)
+	($!local top-context 'atom-memory mem)
 	($!local top-context "found" nil)
 	($!local top-context "answer" nil)
         ($dispatch top-context)))))
