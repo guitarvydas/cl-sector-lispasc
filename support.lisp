@@ -497,6 +497,9 @@
 
 (defun $?local ($context key-s)
   ;; get local variable at key
+  (unless $context
+    ;; in this experimental version, we must ALWAYS find a given variable (in own or in ancestor chain)
+    (error-local-not-found $context key))
   (let ((key (as-symbol key-s)))
     (assert (symbolp key))
     (let ((kv ($?kv $context 'locals)))
@@ -504,8 +507,10 @@
         (let ((lv (assoc key old-locals :test 'string=)))
           (if lv
               (cdr lv)
-            (error-local-not-found $context key)))))))
+	    ($?local (up-context $context) key)))))))
 
+(defun up-context (context)
+  ($?field context 'container))
 
 
 (defun dump ($context depth)
