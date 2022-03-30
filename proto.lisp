@@ -43,15 +43,13 @@
              ,(lambda ($context $message)
                   (cond
                     ((string= "name" (?etag-from-message $message))
-                     (let ((name-to-be-matched (?data-from-message $message)))
-		       (let ((atom-memory ($?local $context 'atom-memory)))
-			 (let (($pred (?eof atom-memory)))
-			   (cond
-                             ((equal $yes $pred)
-			      ($send '("scroll through atoms" . "EOF") $no $context $message))
-                             ((equal $no $pred)
-			      ($!local $context "name-to-be-matched" name-to-be-matched)
-			      ($send '("scroll through atoms"  ."try 1 name match") t $context $message)))))))
+		     (let ((atom-memory ($?local $context 'atom-memory)))
+		       (let (($pred (?eof atom-memory)))
+			 (cond
+                           ((equal $yes $pred)
+			    ($send '("scroll through atoms" . "EOF") $no $context $message))
+                           ((equal $no $pred)
+			    ($send '("scroll through atoms"  ."try 1 name match") t $context $message))))))
                     ((string= "advance" (?etag-from-message $message))
                      (let ((atom-memory ($?local $context 'atom-memory)))
                        (@advance-to-next-atom atom-memory)
