@@ -62,9 +62,12 @@
                              ((equal $yes $pred)
                               ($send '("scroll through atoms" . "EOF") $no $context $message))
                              (t 
-                              ;($!local $context "name-to-be-matched" name-to-be-matched)
-                              ;(format *standard-output* "scroll through atoms $context<-/~a/~%" "...")
-                              ;(pprint ($?kv $context 'locals))
+                              #+nil
+                              ($!local $context 'name-to-be-matched name-to-be-matched)
+                              #+nil
+                              (format *standard-output* "scroll through atoms $context<-/~a/~%" "...")
+                              #+nil
+                              (pprint ($?kv $context 'locals))
 			      ($send '("scroll through atoms" . "try 1 name match") name-to-be-matched $context $message)))))))
                     (t (error-unhandled-message $context $message)))))
     
@@ -84,7 +87,12 @@
                 (cond
                   ((string= "go" (?etag-from-message $message))
 		   (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
-		     (let ((s ($?field-recursive $context "name-to-be-matched")))
+		     (let ((s ($?local $context 'name-to-be-matched)))
+                              ;#+nil
+                              (format *standard-output* "match single atom name $context<-/~a/~%" "...")
+                              ;#+nil
+                              (pprint ($?kv $context 'locals))
+(format *standard-output* "match single atom name s=/~a/ ?data=/~a/~%" s (?data-from-message $message))
                        (let (($pred (?match-string atom-memory (?data-from-message $message))))
 			 (cond
 			   ((equal $yes $pred)

@@ -460,7 +460,15 @@
       (@print program))
     ))
 
+(defun main15 ()
+  (initialize-memory)
+  (let ((mem (make-instance 'atom-memory :bytes *memory*)))
+    (let ((program (@read "CONS" mem)))
+      (@print program))
+    ))
+
 (defun main ()
-  (main12))
+  #+nil(main12)
+  (main15))
 
 
