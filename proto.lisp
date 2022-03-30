@@ -60,7 +60,6 @@
                            (t 
 			    ($send '("scroll through atoms" . "try 1 name match") t $context $message))))))
                     (t (error-unhandled-message $context $message)))))
-    
     (finally  .  nil)
     (children .  nil)
     (connections .  nil)))
