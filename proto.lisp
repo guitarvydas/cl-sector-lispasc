@@ -48,7 +48,7 @@
 			 (let (($pred (?eof atom-memory)))
 			   (cond
                              ((equal $yes $pred)
-			      ($send '("scroll through atoms" . "EOF") $no $context '("scroll-through-atoms" . "initially")))
+			      ($send '("scroll through atoms" . "EOF") $no $context $message))
                              ((equal $no $pred)
 			      ($!local $context "name-to-be-matched" name-to-be-matched)
 			      ($send '("scroll through atoms"  ."try 1 name match") name-to-be-matched $context $message)))))))
