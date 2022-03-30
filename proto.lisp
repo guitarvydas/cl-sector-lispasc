@@ -93,7 +93,7 @@
                               (pprint ($?kv $context 'locals))
                               #+nil
                               (format *standard-output* "match single atom name s=/~a/ ?data=/~a/~%" s (?data-from-message $message))
-                       (let (($pred (?match-string atom-memory (?data-from-message $message))))
+                       (let (($pred (?match-string atom-memory s)))
 			 (cond
 			   ((equal $yes $pred)
                             ($send '("match single atom name" . "ok") (current-atom-index atom-memory) $context $message))
