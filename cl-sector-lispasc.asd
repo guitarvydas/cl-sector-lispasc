@@ -9,8 +9,9 @@
                              (:file "atom-memory" :depends-on ("cl-sector-lisp"))
                              (:file "intern" :depends-on ("atom-memory"))
                              (:file "read" :depends-on ("intern"))
+                             (:file "context" :depends-on ("macros"))
                              (:file "macros" :depends-on ("package"))
-                             (:file "support" :depends-on ("macros"))
+                             (:file "support" :depends-on ("context"))
                              
                              ;(:file ".lookupasc" :depends-on ("intern" "support"))
                              ;(:file "lookup" :depends-on ("../dasl2/asca/lookupasc"))
