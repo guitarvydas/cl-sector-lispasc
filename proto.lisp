@@ -62,9 +62,9 @@
                              ((equal $yes $pred)
                               ($send '("scroll through atoms" . "EOF") $no $context $message))
                              (t 
-                              ($!local $context "name-to-be-matched" name-to-be-matched)
-                              (format *standard-output* "scroll through atoms $context<-/~a/~%" "...")
-                              (pprint ($?kv $context 'locals))
+                              ;($!local $context "name-to-be-matched" name-to-be-matched)
+                              ;(format *standard-output* "scroll through atoms $context<-/~a/~%" "...")
+                              ;(pprint ($?kv $context 'locals))
 			      ($send '("scroll through atoms" . "try 1 name match") name-to-be-matched $context $message)))))))
                     (t (error-unhandled-message $context $message)))))
     
