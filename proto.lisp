@@ -88,11 +88,12 @@
                   ((string= "go" (?etag-from-message $message))
 		   (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
 		     (let ((s ($?local $context 'name-to-be-matched)))
-                              ;#+nil
+                              #+nil
                               (format *standard-output* "match single atom name $context<-/~a/~%" "...")
-                              ;#+nil
+                              #+nil
                               (pprint ($?kv $context 'locals))
-(format *standard-output* "match single atom name s=/~a/ ?data=/~a/~%" s (?data-from-message $message))
+                              #+nil
+                              (format *standard-output* "match single atom name s=/~a/ ?data=/~a/~%" s (?data-from-message $message))
                        (let (($pred (?match-string atom-memory (?data-from-message $message))))
 			 (cond
 			   ((equal $yes $pred)
