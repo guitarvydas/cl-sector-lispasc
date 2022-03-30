@@ -2,6 +2,7 @@
 (defparameter $yes t)
 
 (defun $?kv ($context field-symbol)
+  (assert (symbolp field-symbol))
   (assoc field-symbol $context))
 
 (defun $?field ($context field-symbol)
@@ -471,21 +472,39 @@
   (string= "$self" name))
 
 
-(defun $!local ($context key v)
-  ;; set local variable at key to value v
-  (let ((kv ($?kv $context 'locals)))
-    (unless kv (error-no-locals $context key v))
-    (let ((old-locals (cdr kv)))
-      (setf (cdr kv) (cons (cons key v) old-locals)))))
+(defun check-lower-word (word)
+    (loop
+        for c across word 
+        do (if (lower-case-p c) (return-from check-lower-word T))))
 
-(defun $?local ($context key)
+(defun as-symbol (s)
+  (cond
+   ((symbolp s) s)
+   ((stringp s)
+    (let ((sym (intern (string-upcase s))))
+      (assert (not (check-lower-word (symbol-name sym))))
+      sym))
+   (t (assert nil))))
+
+(defun $!local ($context key-s v)
+  ;; set local variable at key to value v
+  (let ((key (as-symbol key-s)))
+    (assert (symbolp key))
+    (let ((kv ($?kv $context 'locals)))
+      (unless kv (error-no-locals $context key v))
+      (let ((old-locals (cdr kv)))
+        (setf (cdr kv) (cons (cons key v) old-locals))))))
+
+(defun $?local ($context key-s)
   ;; get local variable at key
-  (let ((kv ($?kv $context 'locals)))
-    (let ((old-locals (cdr kv)))
-      (let ((lv (assoc key old-locals :test 'string=)))
-        (if lv
-            (cdr lv)
-          (error-local-not-found $context key))))))
+  (let ((key (as-symbol key-s)))
+    (assert (symbolp key))
+    (let ((kv ($?kv $context 'locals)))
+      (let ((old-locals (cdr kv)))
+        (let ((lv (assoc key old-locals :test 'string=)))
+          (if lv
+              (cdr lv)
+            (error-local-not-found $context key)))))))
 
 
 
