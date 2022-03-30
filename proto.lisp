@@ -44,7 +44,7 @@
                   (cond
                     ((string= "name" (?etag-from-message $message))
                      (let ((name-to-be-matched (?data-from-message $message)))
-		       (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
+		       (let ((atom-memory ($?local $context 'atom-memory)))
 			 (let (($pred (?eof atom-memory)))
 			   (cond
                              ((equal $yes $pred)
@@ -53,7 +53,7 @@
 			      ($!local $context "name-to-be-matched" name-to-be-matched)
 			      ($send '("scroll through atoms"  ."try 1 name match") name-to-be-matched $context $message)))))))
                     ((string= "advance" (?etag-from-message $message))
-                     (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
+                     (let ((atom-memory ($?local $context 'atom-memory)))
                        (let ((name-to-be-matched ($?local $context "name-to-be-matched")))
                          (@advance-to-next-atom atom-memory)
 			 (let (($pred (?eof atom-memory)))
@@ -85,7 +85,7 @@
              ,(lambda ($context $message)
                 (cond
                   ((string= "go" (?etag-from-message $message))
-		   (let ((atom-memory ($?field ($?field-recursive $context '$args) 'atom-memory)))
+		   (let ((atom-memory ($?local $context 'atom-memory)))
 		     (let ((s ($?local $context 'name-to-be-matched)))
                               #+nil
                               (format *standard-output* "match single atom name $context<-/~a/~%" "...")
