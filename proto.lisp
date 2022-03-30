@@ -51,7 +51,7 @@
 			      ($send '("scroll through atoms" . "EOF") $no $context $message))
                              ((equal $no $pred)
 			      ($!local $context "name-to-be-matched" name-to-be-matched)
-			      ($send '("scroll through atoms"  ."try 1 name match") name-to-be-matched $context $message)))))))
+			      ($send '("scroll through atoms"  ."try 1 name match") t $context $message)))))))
                     ((string= "advance" (?etag-from-message $message))
                      (let ((atom-memory ($?local $context 'atom-memory)))
                        (let ((name-to-be-matched ($?local $context "name-to-be-matched")))
@@ -67,7 +67,7 @@
                               (format *standard-output* "scroll through atoms $context<-/~a/~%" "...")
                               #+nil
                               (pprint ($?kv $context 'locals))
-			      ($send '("scroll through atoms" . "try 1 name match") name-to-be-matched $context $message)))))))
+			      ($send '("scroll through atoms" . "try 1 name match") t $context $message)))))))
                     (t (error-unhandled-message $context $message)))))
     
     (finally  .  nil)
