@@ -2,11 +2,10 @@
   `(
     (name  . "lookup")
     (etags  . ("name" "found" "answer"))
-    ($args . nil)
     (inputs . ("name" ))
     (outputs . ("found" "answer" ))
     (locals . (("found" ("found")) ("answer" ("answer")) ("name-to-be-matched" ("name-to-be-matched"))))
-    (initially . ())
+    (initially . nil)
     (handler .  
              ,(lambda ($context $message)
                 (cond
@@ -16,7 +15,7 @@
                   ((string= "answer" (?etag-from-message $message))
                    ($!local $context "answer" (?data-from-message $message)))
                   (t (error-unhandled-message $context $message)))))
-    (finally  . ())
+    (finally  . nil)
     (children .  (
 		  ("$self". "lookup")
                   ("scroll through atoms" . "scroll through atoms")
@@ -39,7 +38,7 @@
     (inputs .  ("name" "advance" ))
     (outputs .  ("EOF" "try 1 name match" ))
     (locals . ())
-    (initially . ())
+    (initially . nil)
     (handler . 
              ,(lambda ($context $message)
                   (cond

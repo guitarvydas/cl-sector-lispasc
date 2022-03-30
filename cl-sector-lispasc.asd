@@ -16,7 +16,7 @@
                              ;(:file ".lookupasc" :depends-on ("intern" "support"))
                              ;(:file "lookup" :depends-on ("../dasl2/asca/lookupasc"))
 
-                             (:file "proto" :depends-on ("intern" "support"))
+			     (:file "proto" :depends-on ("intern" "support"))
                              (:file "lookup" :depends-on ("proto"))
 
                              ))))
